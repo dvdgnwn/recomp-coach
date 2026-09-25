@@ -45,7 +45,7 @@ export function AssessmentForm({
     const neckNum = Number(neck);
     const hipNum = Number(hip);
 
-    if (!age || isNaN(ageNum) || ageNum < 15 || ageNum > 100) {
+    if (!age || isNaN(ageNum) || ageNum < 18 || ageNum > 100) {
       newErrors.age = t.validationErrors.ageRange;
     }
     if (!weight || isNaN(weightNum) || weightNum < 30 || weightNum > 250) {

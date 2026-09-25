@@ -117,3 +117,48 @@ export function computeBMI(weightKg: number, heightCm: number): number {
   const heightM = heightCm / 100;
   return Number((weightKg / (heightM * heightM)).toFixed(1));
 }
+
+export type FitnessPath = 'recomp' | 'cut' | 'lean_bulk';
+
+export interface PathDecision {
+  path: FitnessPath;
+  borderline: boolean;
+}
+
+/**
+ * Determines the fitness path (recomp, cut, or lean_bulk) based on sex, body fat range, and FFMI.
+ * 
+ * Rules:
+ * - Men: bfMid >= 25 -> "cut"; bfMid <= 15 -> "lean_bulk"; otherwise -> "recomp".
+ * - Women: bfMid >= 32 -> "cut"; bfMid <= 22 -> "lean_bulk"; otherwise -> "recomp".
+ * - If the range [bfLow, bfHigh] crosses a threshold, choose "recomp" and set borderline=true.
+ */
+export function decidePath(
+  sex: Sex,
+  bfLow: number,
+  bfMid: number,
+  bfHigh: number,
+  ffmi: number
+): PathDecision {
+  const lowerThreshold = sex === 'male' ? 15 : 22;
+  const upperThreshold = sex === 'male' ? 25 : 32;
+
+  // Check if range [bfLow, bfHigh] crosses either threshold
+  const crossesLower = bfLow <= lowerThreshold && bfHigh >= lowerThreshold;
+  const crossesUpper = bfLow <= upperThreshold && bfHigh >= upperThreshold;
+
+  if (crossesLower || crossesUpper) {
+    return { path: 'recomp', borderline: true };
+  }
+
+  if (bfMid >= upperThreshold) {
+    return { path: 'cut', borderline: false };
+  }
+
+  if (bfMid <= lowerThreshold) {
+    return { path: 'lean_bulk', borderline: false };
+  }
+
+  return { path: 'recomp', borderline: false };
+}
+

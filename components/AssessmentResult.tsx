@@ -14,6 +14,7 @@ import {
   BookOpen,
   AlertTriangle,
   FileText,
+  Tag,
 } from 'lucide-react';
 
 interface AssessmentResultProps {
@@ -34,7 +35,16 @@ export function AssessmentResult({
   const t = translations[lang];
   const { metrics, assessment, referencedReels, is_fallback } = data;
 
-  const pathConfig = {
+  const pathConfig: Record<
+    string,
+    {
+      label: string;
+      desc: string;
+      color: string;
+      badge: string;
+      icon: React.ComponentType<{ className?: string }>;
+    }
+  > = {
     recomp: {
       label: t.pathRecomp,
       desc:
@@ -49,18 +59,28 @@ export function AssessmentResult({
       label: t.pathCut,
       desc:
         lang === 'id'
-          ? 'Fokus pada defisit kalori moderat (10-15%) untuk kesehatan metabolik.'
-          : 'Focus on a moderate calorie deficit (10-15%) to improve metabolic health.',
+          ? 'Fokus pada penurunan lemak bertahap untuk kesehatan metabolik.'
+          : 'Focus on gradual body fat loss to improve metabolic health.',
       color: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
       badge: 'bg-amber-500 text-slate-950',
       icon: Flame,
+    },
+    lean_bulk: {
+      label: t.pathLeanBulk,
+      desc:
+        lang === 'id'
+          ? 'Fokus surplus kalori ringan untuk memaksimalkan pertumbuhan massa otot.'
+          : 'Focus on a slight calorie surplus to maximize lean muscle growth.',
+      color: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+      badge: 'bg-blue-500 text-slate-950',
+      icon: TrendingUp,
     },
     'lean bulk': {
       label: t.pathLeanBulk,
       desc:
         lang === 'id'
-          ? 'Fokus surplus kalori ringan (200-300 kcal) untuk memaksimalkan hipertrofi.'
-          : 'Focus on a slight calorie surplus (200-300 kcal) to maximize hypertrophy.',
+          ? 'Fokus surplus kalori ringan untuk memaksimalkan pertumbuhan massa otot.'
+          : 'Focus on a slight calorie surplus to maximize lean muscle growth.',
       color: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
       badge: 'bg-blue-500 text-slate-950',
       icon: TrendingUp,
@@ -68,7 +88,7 @@ export function AssessmentResult({
   };
 
   const currentPath = assessment?.path || 'recomp';
-  const pathInfo = pathConfig[currentPath];
+  const pathInfo = pathConfig[currentPath] || pathConfig.recomp;
   const PathIcon = pathInfo.icon;
 
   // FFMI Context interpretation
@@ -118,9 +138,16 @@ export function AssessmentResult({
               {t.pathLabel}
             </span>
           </div>
-          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${pathInfo.badge}`}>
-            {pathInfo.label}
-          </span>
+          <div className="flex items-center gap-1.5">
+            {assessment?.borderline && (
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-900/80 text-amber-300 border border-amber-500/30">
+                {lang === 'id' ? 'Ambang Batas' : 'Borderline Range'}
+              </span>
+            )}
+            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${pathInfo.badge}`}>
+              {pathInfo.label}
+            </span>
+          </div>
         </div>
         <p className="text-xs text-slate-300 mt-1 leading-relaxed">
           {pathInfo.desc}
@@ -241,15 +268,22 @@ export function AssessmentResult({
                 key={reel.id}
                 className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/60 hover:border-slate-600 transition-colors"
               >
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <h4 className="text-xs font-semibold text-slate-100 line-clamp-1">
-                    {reel.title}
-                  </h4>
+                <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xs font-semibold text-slate-100 line-clamp-1">
+                      {reel.title}
+                    </h4>
+                    {reel.placeholder && (
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-medium shrink-0">
+                        Sample content – not from the creator
+                      </span>
+                    )}
+                  </div>
                   <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-slate-700 text-slate-300 font-mono shrink-0">
                     {reel.id}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 line-clamp-3 leading-relaxed">
+                <p className="text-[11px] text-slate-400 line-clamp-3 leading-relaxed mt-1">
                   "{reel.text}"
                 </p>
               </div>

@@ -1,17 +1,20 @@
 [
   {
     "id": "reel_01",
-    "title": "Berat Badan Ideal Itu Mitos? Kenapa Timbangan Sering Menipu",
-    "text": "Banyak orang panik waktu timbangan gak turun, padahal celana makin longgar. Berat badan di timbangan itu gabungan dari lemak, otot, air, glikogen, dan makanan di pencernaan. Kalau kamu baru mulai latihan beban dan makan cukup protein, kamu bisa kehilangan 1 kg lemak sekaligus menambah 1 kg otot. Angka timbangan flat, tapi bentuk tubuh dan lingkar pinggang mengecil drastis. Jangan cuma percaya timbangan, ukur komposisi tubuh dan progres di cermin."
+    "title": "Berat Badan Timbangan vs Komposisi Tubuh",
+    "text": "Timbangan konvensional mengukur total massa tubuh secara keseluruhan tanpa membedakan lemak, otot, air, dan isi pencernaan. Pemula yang baru memulai latihan beban sering mengalami pembentukan jaringan otot bersamaan dengan penurunan cadangan lemak. Kondisi ini membuat angka timbangan cenderung stabil meski bentuk fisik dan lingkar tubuh mengalami perbaikan nyata. Mengukur lingkar tubuh dan mengevaluasi performa latihan jauh lebih informatif daripada sekadar menatap angka timbangan.",
+    "placeholder": true
   },
   {
     "id": "reel_02",
-    "title": "Body Recomposition: Turun Lemak Sekaligus Naik Otot",
-    "text": "Siapa yang paling bisa recomp? Pemula gym (newbie gains), orang yang kembali latihan setelah jeda lama, atau orang dengan persentase lemak tubuh sedang-tinggi. Kuncinya bukan defisit kalori ekstrem! Cukup defisit tipis 10-15% atau kalori maintenance, konsumsi protein 1.6-2.2 gram per kg berat badan per hari, dan progressive overload saat latihan angkat beban. Kalau defisit terlalu lapar dan lemas, otot malah hilang dan metabolisme turun."
+    "title": "Prinsip Dasar Body Recomposition",
+    "text": "Body recomposition adalah proses membangun massa otot sekaligus menurunkan persentase lemak tubuh secara bertahap. Pendekatan ini sangat efektif bagi pemula di gym atau mereka yang baru kembali aktif berlatih. Kunci utamanya adalah konsistensi latihan beban dengan beban yang meningkat secara bertahap (progressive overload) serta kecukupan asupan protein harian. Menghindari pembatasan kalori yang terlalu drastis sangat penting agar tubuh tetap memiliki energi untuk memulihkan dan mempertahankan jaringan otot.",
+    "placeholder": true
   },
   {
     "id": "reel_03",
-    "title": "Cut vs Bulk vs Recomp: Cara Pilih Jalur yang Tepat",
-    "text": "Bingung mau cut, bulk, atau recomp? Aturan dasarnya: kalau body fat kamu tinggi (pria >22%, wanita >30%), pilih cut perlahan dengan defisit moderat agar kesehatan metabolik dan sensitivitas insulin membaik. Kalau kamu kurus (pria <12%, wanita <20%), jangan takut makan: lean bulk dengan surplus kalori 200-300 kcal untuk bangun otot. Kalau di tengah-tengah atau baru mulai gym, jangan pusing: recomp adalah jalur terbaik. Targetkan protein harian yang konsisten dan catat progres kekuatan."
+    "title": "Menentukan Fokus: Recomp, Cut, atau Bulk",
+    "text": "Menentukan fokus latihan antara menurunkan lemak, menambah massa otot, atau recomposition bergantung pada titik awal komposisi tubuh dan kenyamanan fisik masing-masing individu. Seseorang dengan kadar lemak tubuh yang lebih tinggi biasanya memprioritaskan penurunan lemak secara bertahap untuk kebugaran metabolik. Sebaliknya, seseorang yang relatif kurus akan lebih optimal berfokus pada pembentukan otot dengan asupan nutrisi yang mendukung pertumbuhan. Bagi pemula atau mereka di rentang menengah, recomposition sering kali menjadi pilihan awal yang paling seimbang dan berkelanjutan.",
+    "placeholder": true
   }
 ]

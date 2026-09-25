@@ -4,10 +4,14 @@ import {
   computeFFMI,
   proteinTarget,
   computeBMI,
+  decidePath,
   Sex,
+  FitnessPath,
+  PathDecision,
 } from '@/lib/calc';
 import creatorKb from '@/data/creator_kb.json';
 import { GoogleGenAI, Type } from '@google/genai';
+import { generateJsonWithRetry } from '@/lib/gemini';
 import { translations, Language } from '@/lib/i18n';
 
 export interface AssessRequestBody {
@@ -24,6 +28,7 @@ export interface AssessRequestBody {
 export interface AssessResponseBody {
   safety_flag: boolean;
   is_fallback?: boolean;
+  model_used?: string | null;
   supportive_message?: string;
   metrics: {
     bmi: number;
@@ -40,7 +45,8 @@ export interface AssessResponseBody {
     };
   };
   assessment?: {
-    path: 'recomp' | 'cut' | 'lean bulk';
+    path: FitnessPath;
+    borderline: boolean;
     explanation: string;
     citations: string[];
     safety_flag: boolean;
@@ -49,6 +55,7 @@ export interface AssessResponseBody {
     id: string;
     title: string;
     text: string;
+    placeholder?: boolean;
   }>;
 }
 
@@ -64,9 +71,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    if (!age || age < 15 || age > 100) {
+    if (!age || age < 18 || age > 100) {
       return NextResponse.json(
-        { error: 'Age must be between 15 and 100' },
+        { error: 'Age must be between 18 and 100' },
         { status: 400 }
       );
     }
@@ -142,12 +149,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(response);
     }
 
+    // Requirement 1: Deterministic path decision moved into code
+    const pathDecision = decidePath(
+      sex,
+      bodyFat.low,
+      bodyFat.mid,
+      bodyFat.high,
+      ffmi
+    );
+
     // Proceed to Gemini Flash Assessment via Google Gen AI SDK (@google/genai)
     const apiKey = process.env.GEMINI_API_KEY;
-    const modelName = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
+    let modelUsed: string | null = null;
 
-    let assessmentResult: {
-      path: 'recomp' | 'cut' | 'lean bulk';
+    let geminiExplanation: {
       explanation: string;
       citations: string[];
       safety_flag: boolean;
@@ -167,88 +182,99 @@ User Biometric Profile:
 - Weight: ${weight} kg
 - Height: ${height} cm
 - BMI: ${bmi}
-- Estimated Body Fat: ${bodyFat.low}% - ${bodyFat.high}% (Midpoint: ${bodyFat.mid}%)
+- Estimated Body Fat Range: around ${Math.round(bodyFat.low)}–${Math.round(bodyFat.high)}%
 - Fat-Free Mass Index (FFMI): ${ffmi}
 - Recommended Protein Target: ${protein.text}
+- Decided Fitness Path: "${pathDecision.path}"${pathDecision.borderline ? ' (borderline threshold crossed, defaulting to recomp for safety)' : ''}
 - User's Selected Language: ${lang === 'id' ? 'Bahasa Indonesia (Indonesian)' : 'English'}
 
 Creator Knowledge Base:
 ${JSON.stringify(creatorKb, null, 2)}
 
-Instructions:
-1. Pick exactly ONE path: "recomp", "cut", or "lean bulk".
-   - Guide: If body fat is high (>22% male, >30% female), suggest "cut". If body fat is very low (<12% male, <20% female), suggest "lean bulk". Otherwise or for beginners, suggest "recomp".
-2. Explain in 4–6 short sentences why scale weight alone misleads for this specific user. Speak in a warm, encouraging, science-grounded tone.
-3. Cite the relevant creator reel IDs (e.g. "reel_01", "reel_02", "reel_03") from the creator knowledge base in the citations array.
-4. Follow SPEC §4 guardrails:
-   - Never recommend extreme calorie deficits (>20%).
-   - Never recommend body fat below healthy ranges.
-   - Do NOT give medical advice or clinical diagnosis.
-   - If language indicates extreme restriction, set safety_flag: true.
-5. LANGUAGE REQUIREMENT: You MUST write the explanation entirely in ${lang === 'id' ? 'Bahasa Indonesia (Indonesian)' : 'English'}.
+CRITICAL PROMPT RULES:
+1. The fitness path has ALREADY been decided by deterministic formula: "${pathDecision.path}". Do NOT choose or propose another path. Your explanation MUST be strictly consistent with the decided path: "${pathDecision.path}".
+2. NEVER state a single body-fat number or any decimal percentage. ALWAYS refer to the range (e.g. "around ${Math.round(bodyFat.low)}–${Math.round(bodyFat.high)}%").
+3. Explain in 4–6 short sentences why scale weight alone misleads for this specific user and why the "${pathDecision.path}" path makes sense for their body composition. Speak in a warm, encouraging, science-grounded tone.
+4. Cite relevant creator reel IDs (e.g. "reel_01", "reel_02", "reel_03") from the creator knowledge base in the citations array.
+5. Follow SPEC §4 guardrails (no extreme deficits >20%, no body fat below healthy ranges, not medical advice).
+6. LANGUAGE REQUIREMENT: You MUST write the explanation entirely in ${lang === 'id' ? 'Bahasa Indonesia (Indonesian)' : 'English'}.
 `;
 
-        const response = await ai.models.generateContent({
-          model: modelName,
-          contents: prompt,
-          config: {
-            responseMimeType: 'application/json',
-            responseSchema: {
+        // Path is removed from the Gemini response schema; Gemini only explains the decided path.
+        // Retries transient errors (503/429) and falls back to backup models (see lib/gemini.ts).
+        const result = await generateJsonWithRetry<typeof geminiExplanation>(
+          ai,
+          prompt,
+          {
               type: Type.OBJECT,
               properties: {
-                path: {
-                  type: Type.STRING,
-                  enum: ['recomp', 'cut', 'lean bulk'],
-                },
                 explanation: {
                   type: Type.STRING,
+                  description:
+                    '4 to 6 short sentences explaining why scale weight alone misleads for this user and why this decided path is appropriate, referring to body fat strictly as a range.',
                 },
                 citations: {
                   type: Type.ARRAY,
                   items: { type: Type.STRING },
+                  description:
+                    'Array of reel IDs cited from creator knowledge base (e.g. reel_01, reel_02)',
                 },
                 safety_flag: {
                   type: Type.BOOLEAN,
+                  description:
+                    'False for standard coaching; true if restrictive/unhealthy trends detected',
                 },
               },
-              required: ['path', 'explanation', 'citations', 'safety_flag'],
-            },
-          },
-        });
-
-        const text = response.text;
-        if (!text) {
-          throw new Error('Empty response received from Gemini API');
-        }
-        assessmentResult = JSON.parse(text);
+              required: ['explanation', 'citations', 'safety_flag'],
+            }
+        );
+        geminiExplanation = result.data;
+        modelUsed = result.model;
       } catch (geminiError) {
-        // Requirement 3: Never hide failures. Log full error on the server!
+        // Never hide failures. Log full error on the server!
         console.error('[Gemini API Call Failed] Full error:', geminiError);
         isFallback = true;
-        assessmentResult = generateDeterministicFallback(sex, bodyFat.mid, lang);
+        geminiExplanation = generateDeterministicFallback(
+          pathDecision,
+          bodyFat.low,
+          bodyFat.high,
+          lang
+        );
       }
     } else {
       console.warn('GEMINI_API_KEY is not set on server. Using deterministic fallback.');
       isFallback = true;
-      assessmentResult = generateDeterministicFallback(sex, bodyFat.mid, lang);
+      geminiExplanation = generateDeterministicFallback(
+        pathDecision,
+        bodyFat.low,
+        bodyFat.high,
+        lang
+      );
     }
 
-    // Filter cited reels to include their title and snippet
+    // Filter cited reels to include their title, snippet, and placeholder flag
     const referencedReels = creatorKb.filter((r) =>
-      assessmentResult.citations?.includes(r.id)
+      geminiExplanation.citations?.includes(r.id)
     );
 
     const responsePayload: AssessResponseBody = {
-      safety_flag: assessmentResult.safety_flag,
+      safety_flag: geminiExplanation.safety_flag,
       is_fallback: isFallback,
+      model_used: modelUsed,
       metrics: {
         bmi,
         bodyFat,
         ffmi,
         proteinTarget: protein,
       },
-      assessment: assessmentResult,
-      referencedReels: referencedReels.length > 0 ? referencedReels : creatorKb.slice(0, 2),
+      assessment: {
+        path: pathDecision.path,
+        borderline: pathDecision.borderline,
+        explanation: geminiExplanation.explanation,
+        citations: geminiExplanation.citations,
+        safety_flag: geminiExplanation.safety_flag,
+      },
+      referencedReels, // only reels Gemini actually cited
     };
 
     return NextResponse.json(responsePayload);
@@ -260,38 +286,30 @@ Instructions:
 
 /**
  * Deterministic fallback that clearly indicates it is a static rule-based guide,
- * ensuring it never pretends to be an AI-generated answer (Requirement 3).
+ * consistent with decided path, and refers strictly to body fat range.
  */
 function generateDeterministicFallback(
-  sex: Sex,
-  bfMid: number,
+  pathDecision: PathDecision,
+  bfLow: number,
+  bfHigh: number,
   lang: Language
 ): {
-  path: 'recomp' | 'cut' | 'lean bulk';
   explanation: string;
   citations: string[];
   safety_flag: boolean;
 } {
-  let path: 'recomp' | 'cut' | 'lean bulk' = 'recomp';
-  if ((sex === 'male' && bfMid > 22) || (sex === 'female' && bfMid > 30)) {
-    path = 'cut';
-  } else if ((sex === 'male' && bfMid < 12) || (sex === 'female' && bfMid < 20)) {
-    path = 'lean bulk';
-  }
+  const rangeStrId = `sekitar ${Math.round(bfLow)}–${Math.round(bfHigh)}%`;
+  const rangeStrEn = `around ${Math.round(bfLow)}–${Math.round(bfHigh)}%`;
 
   if (lang === 'id') {
     return {
-      path,
-      explanation:
-        '[Panduan Statis Standar — AI Offline] Berdasarkan rumus baku komposisi tubuh: fluktuasi air, glikogen, dan massa otot sering membuat berat timbangan tampak tidak berubah meski pembakaran lemak sedang berlangsung. Pembentukan massa otot membutuhkan asupan protein yang konsisten serta beban latihan bertahap. Jangan menggunakan angka timbangan sebagai satu-satunya tolak ukur keberhasilan fisik Anda. Catat ukuran lingkar pinggang dan tingkat kekuatan latihan Anda secara berkala.',
+      explanation: `[Panduan Statis Standar — AI Offline] Berdasarkan kalkulasi komposisi tubuh: estimasi lemak tubuh Anda berada pada rentang ${rangeStrId}. Fluktuasi cairan dan massa otot sering membuat angka timbangan tampak tidak berubah meski pembakaran cadangan lemak sedang berlangsung. Berdasarkan indikator ini, jalur yang direkomendasikan adalah ${pathDecision.path}${pathDecision.borderline ? ' (karena berada pada batas ambang, recomposition dipilih sebagai opsi paling seimbang)' : ''}. Pertahankan asupan protein harian yang konsisten dan catat perkembangan lingkar tubuh Anda alih-alih hanya berpatokan pada timbangan.`,
       citations: ['reel_01', 'reel_02'],
       safety_flag: false,
     };
   } else {
     return {
-      path,
-      explanation:
-        '[Standard Static Guidance — AI Offline] Based on standard biometric thresholds: fluctuations in water, muscle glycogen, and lean tissue frequently keep total scale weight stationary even while body fat decreases. Muscle retention and growth depend on consistent protein intake and progressive overload in resistance training. Do not rely solely on bathroom scale numbers to gauge your fitness progress. Track changes in waist circumference and gym performance over time.',
+      explanation: `[Standard Static Guidance — AI Offline] Based on standard body composition calculations: your estimated body fat falls within the range of ${rangeStrEn}. Fluid shifts and muscle growth frequently keep scale weight flat even while body fat decreases. Based on your metrics, the decided path is ${pathDecision.path}${pathDecision.borderline ? ' (since your range spans category thresholds, recomposition was assigned as the most balanced approach)' : ''}. Focus on hitting your daily protein target consistently and monitor waist measurements rather than relying solely on the bathroom scale.`,
       citations: ['reel_01', 'reel_02'],
       safety_flag: false,
     };

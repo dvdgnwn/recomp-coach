@@ -97,7 +97,7 @@ export const translations: Record<Language, Translations> = {
     supportiveNoticeMessage:
       "Kesehatan dan kesejahteraan Anda adalah yang paling utama. Dari pengukuran yang Anda masukkan, indikator tubuh menunjukkan bahwa Anda kemungkinan berada di bawah berat badan sehat atau mengalami pembatasan nutrisi. Kami tidak memberikan rekomendasi penurunan atau target angka di sini. Kami sangat menyarankan Anda berkonsultasi langsung dengan dokter atau ahli gizi teregistrasi (dietitian) untuk mendapatkan panduan yang aman dan personal.",
     validationErrors: {
-      ageRange: "Usia harus antara 15 hingga 100 tahun.",
+      ageRange: "Usia harus antara 18 hingga 100 tahun.",
       weightRange: "Berat badan harus antara 30 hingga 250 kg.",
       heightRange: "Tinggi badan harus antara 100 hingga 250 cm.",
       waistRange: "Lingkar pinggang harus antara 40 hingga 200 cm.",
@@ -152,7 +152,7 @@ export const translations: Record<Language, Translations> = {
     supportiveNoticeMessage:
       "Your health and well-being come first. Based on your measurements, indicators suggest that you may be underweight or in a restrictive energy state. We intentionally bypass weight/target coaching here. We strongly encourage you to speak with a physician or registered dietitian who can provide safe, supportive, and individualized care.",
     validationErrors: {
-      ageRange: "Age must be between 15 and 100 years.",
+      ageRange: "Age must be between 18 and 100 years.",
       weightRange: "Weight must be between 30 and 250 kg.",
       heightRange: "Height must be between 100 and 250 cm.",
       waistRange: "Waist circumference must be between 40 and 200 cm.",

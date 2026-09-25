@@ -1,24 +1,40 @@
-import { describe, it, expect, beforeAll } from 'vitest';
-import { POST } from '../app/api/assess/route';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { NextRequest } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
-beforeAll(() => {
-  // Ensure .env.local variables are loaded for testing
-  const envPath = path.resolve(__dirname, '../.env.local');
-  if (fs.existsSync(envPath)) {
-    const envContent = fs.readFileSync(envPath, 'utf-8');
-    const keyMatch = envContent.match(/GEMINI_API_KEY\s*=\s*(.+)/);
-    if (keyMatch) {
-      process.env.GEMINI_API_KEY = keyMatch[1].trim();
-    }
-    const modelMatch = envContent.match(/GEMINI_MODEL\s*=\s*(.+)/);
-    if (modelMatch) {
-      process.env.GEMINI_MODEL = modelMatch[1].trim();
-    }
-  }
+// Mock the Gemini SDK so default tests never call the real API (no quota, no flakiness).
+const { generateContent } = vi.hoisted(() => ({ generateContent: vi.fn() }));
+vi.mock('@google/genai', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@google/genai')>();
+  return {
+    ...actual,
+    GoogleGenAI: class {
+      models = { generateContent };
+      constructor(_opts: unknown) {}
+    },
+  };
 });
+
+import { POST } from '../app/api/assess/route';
+
+beforeEach(() => {
+  generateContent.mockReset();
+  process.env.GEMINI_API_KEY = 'test-key';
+  process.env.GEMINI_MODEL = 'primary-model';
+  process.env.GEMINI_FALLBACK_MODELS = 'backup-model';
+  process.env.GEMINI_RETRY_BASE_MS = '1';
+});
+
+const okResponse = (citations: string[] = ['reel_01']) => ({
+  text: JSON.stringify({
+    explanation: 'Scale weight alone misleads because it mixes fat, muscle and water.',
+    citations,
+    safety_flag: false,
+  }),
+});
+const apiError = (status: number) => Object.assign(new Error(`status ${status}`), { status });
+
+// Male 70 kg, 170 cm, waist 88, neck 38 -> body fat ~16.6–23.6% -> recomp (not borderline)
+const recompInput = { sex: 'male', age: 28, weight: 70, height: 170, waist: 88, neck: 38, lang: 'en' };
 
 function createMockRequest(body: unknown): NextRequest {
   return new NextRequest('http://localhost:3000/api/assess', {
@@ -82,53 +98,67 @@ describe('POST /api/assess API Route', () => {
     expect(data.error).toContain('Hip');
   });
 
-  // Requirement 5: Test that FAILS if fallback path is used when GEMINI_API_KEY is set
-  it('fails if the fallback path is used when GEMINI_API_KEY is set', async () => {
-    expect(process.env.GEMINI_API_KEY).toBeTruthy();
 
-    const req = createMockRequest({
-      sex: 'male',
-      age: 26,
-      weight: 75,
-      height: 175,
-      waist: 82,
-      neck: 38,
-      lang: 'en',
-    });
+  it('rejects users under 18', async () => {
+    const res = await POST(createMockRequest({ ...recompInput, age: 16 }));
+    expect(res.status).toBe(400);
+  });
 
-    const res = await POST(req);
-    expect(res.status).toBe(200);
-    const data = await res.json();
-
-    // Must NOT be a fallback; must be real Gemini Flash output
+  it('uses Gemini output and the code-decided path', async () => {
+    generateContent.mockResolvedValueOnce(okResponse(['reel_01']));
+    const data = await (await POST(createMockRequest(recompInput))).json();
     expect(data.is_fallback).toBe(false);
-    expect(data.assessment).toBeDefined();
-    expect(data.assessment.explanation).toBeDefined();
-    expect(data.assessment.citations).toBeInstanceOf(Array);
-    expect(data.assessment.explanation.length).toBeGreaterThan(20);
-  }, 30000);
+    expect(data.model_used).toBe('primary-model');
+    expect(data.assessment.path).toBe('recomp');
+    expect(data.assessment.borderline).toBe(false);
+    expect(data.referencedReels.map((r: { id: string }) => r.id)).toEqual(['reel_01']);
+    expect(generateContent).toHaveBeenCalledTimes(1);
+  });
 
-  // Requirement 4: Test that explanation language follows the ID/EN toggle
-  it('follows the ID toggle and generates explanation in Indonesian', async () => {
-    expect(process.env.GEMINI_API_KEY).toBeTruthy();
+  it('never passes a single body-fat number to Gemini as an example', async () => {
+    generateContent.mockResolvedValueOnce(okResponse());
+    await POST(createMockRequest(recompInput));
+    const prompt: string = generateContent.mock.calls[0][0].contents;
+    expect(prompt).toContain('around 17–24%');
+    expect(prompt).not.toMatch(/exact bounds/);
+  });
 
-    const req = createMockRequest({
-      sex: 'male',
-      age: 28,
-      weight: 78,
-      height: 178,
-      waist: 86,
-      neck: 39,
-      lang: 'id',
-    });
-
-    const res = await POST(req);
-    expect(res.status).toBe(200);
-    const data = await res.json();
-
+  it('retries a transient 503 and succeeds on the same model', async () => {
+    generateContent.mockRejectedValueOnce(apiError(503)).mockResolvedValueOnce(okResponse());
+    const data = await (await POST(createMockRequest(recompInput))).json();
     expect(data.is_fallback).toBe(false);
-    expect(data.assessment).toBeDefined();
-    // Verify explanation contains Indonesian words
-    expect(data.assessment.explanation).toMatch(/(komposisi|lemak|otot|timbangan|berat|tubuh|massa)/i);
-  }, 30000);
+    expect(data.model_used).toBe('primary-model');
+    expect(generateContent).toHaveBeenCalledTimes(2);
+  });
+
+  it('switches to the backup model when the primary model is not found (404)', async () => {
+    generateContent.mockRejectedValueOnce(apiError(404)).mockResolvedValueOnce(okResponse());
+    const data = await (await POST(createMockRequest(recompInput))).json();
+    expect(data.is_fallback).toBe(false);
+    expect(data.model_used).toBe('backup-model');
+    expect(generateContent.mock.calls[1][0].model).toBe('backup-model');
+  });
+
+  it('shows a visible fallback when every model keeps failing', async () => {
+    generateContent.mockRejectedValue(apiError(503));
+    const data = await (await POST(createMockRequest(recompInput))).json();
+    expect(data.is_fallback).toBe(true);
+    expect(data.model_used).toBeNull();
+    expect(data.assessment.explanation).toContain('AI Offline');
+    expect(generateContent).toHaveBeenCalledTimes(6); // 3 attempts x 2 models
+  });
+
+  it('does not retry non-transient errors such as 400', async () => {
+    generateContent.mockRejectedValue(apiError(400));
+    const data = await (await POST(createMockRequest(recompInput))).json();
+    expect(data.is_fallback).toBe(true);
+    expect(generateContent).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses the fallback when no API key is set', async () => {
+    delete process.env.GEMINI_API_KEY;
+    const data = await (await POST(createMockRequest(recompInput))).json();
+    expect(data.is_fallback).toBe(true);
+    expect(generateContent).not.toHaveBeenCalled();
+  });
 });

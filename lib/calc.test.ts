@@ -4,6 +4,7 @@ import {
   computeFFMI,
   proteinTarget,
   computeBMI,
+  decidePath,
 } from './calc';
 
 describe('computeBodyFatNavy', () => {
@@ -86,3 +87,62 @@ describe('computeBMI', () => {
     expect(computeBMI(45, 170)).toBe(15.6);
   });
 });
+
+describe('decidePath', () => {
+  describe('Men rules', () => {
+    it('chooses cut when whole range is above 25%', () => {
+      const decision = decidePath('male', 26, 29.5, 33, 19);
+      expect(decision).toEqual({ path: 'cut', borderline: false });
+    });
+
+    it('chooses lean_bulk when whole range is below 15%', () => {
+      const decision = decidePath('male', 8, 11.5, 14.5, 18);
+      expect(decision).toEqual({ path: 'lean_bulk', borderline: false });
+    });
+
+    it('chooses recomp without borderline when strictly between 15% and 25%', () => {
+      const decision = decidePath('male', 17, 20, 23, 19.5);
+      expect(decision).toEqual({ path: 'recomp', borderline: false });
+    });
+
+    it('chooses recomp with borderline=true when range crosses 25% threshold', () => {
+      // e.g. mid = 26, low = 22.5, high = 29.5 (crosses 25)
+      const decision = decidePath('male', 22.5, 26, 29.5, 20);
+      expect(decision).toEqual({ path: 'recomp', borderline: true });
+    });
+
+    it('chooses recomp with borderline=true when range crosses 15% threshold', () => {
+      // e.g. mid = 16, low = 12.5, high = 19.5 (crosses 15)
+      const decision = decidePath('male', 12.5, 16, 19.5, 18);
+      expect(decision).toEqual({ path: 'recomp', borderline: true });
+    });
+  });
+
+  describe('Women rules', () => {
+    it('chooses cut when whole range is above 32%', () => {
+      const decision = decidePath('female', 33, 36.5, 40, 16);
+      expect(decision).toEqual({ path: 'cut', borderline: false });
+    });
+
+    it('chooses lean_bulk when whole range is below 22%', () => {
+      const decision = decidePath('female', 16, 18.5, 21, 15);
+      expect(decision).toEqual({ path: 'lean_bulk', borderline: false });
+    });
+
+    it('chooses recomp without borderline when strictly between 22% and 32%', () => {
+      const decision = decidePath('female', 24, 27, 30, 16.5);
+      expect(decision).toEqual({ path: 'recomp', borderline: false });
+    });
+
+    it('chooses recomp with borderline=true when range crosses 32% threshold', () => {
+      const decision = decidePath('female', 30, 33.5, 37, 17);
+      expect(decision).toEqual({ path: 'recomp', borderline: true });
+    });
+
+    it('chooses recomp with borderline=true when range crosses 22% threshold', () => {
+      const decision = decidePath('female', 20, 23.5, 27, 15.5);
+      expect(decision).toEqual({ path: 'recomp', borderline: true });
+    });
+  });
+});
+
