@@ -17,11 +17,16 @@ export interface GenerateContentClient {
   models: {
     generateContent(args: {
       model: string;
-      contents: string;
+      contents: GeminiContents;
       config?: Record<string, unknown>;
     }): Promise<{ text?: string | null }>;
   };
 }
+
+/** Plain text prompt, or multimodal parts, e.g. [{ text }, { inlineData: { mimeType, data } }]. */
+export type GeminiContents =
+  | string
+  | Array<{ text: string } | { inlineData: { mimeType: string; data: string } }>;
 
 export interface GenerateJsonResult<T> {
   data: T;
@@ -51,7 +56,7 @@ export function modelChain(): string[] {
 
 export async function generateJsonWithRetry<T>(
   ai: GenerateContentClient,
-  prompt: string,
+  contents: GeminiContents,
   responseSchema: unknown
 ): Promise<GenerateJsonResult<T>> {
   const baseDelay = Number(process.env.GEMINI_RETRY_BASE_MS ?? 800);
@@ -64,7 +69,7 @@ export async function generateJsonWithRetry<T>(
       try {
         const res = await ai.models.generateContent({
           model,
-          contents: prompt,
+          contents,
           config: { responseMimeType: 'application/json', responseSchema },
         });
         if (!res.text) throw new Error('Empty response received from Gemini API');

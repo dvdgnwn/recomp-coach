@@ -1,0 +1,933 @@
+{
+  "source": "Tabel Komposisi Pangan Indonesia (TKPI), Kementerian Kesehatan RI, via panganku.org; extracted from github.com/intanypurbasari/food-nutrition (tkpi_clean.csv)",
+  "basis": "per 100 g edible portion",
+  "license_note": "Subset for non-commercial hackathon prototype. Verify TKPI redistribution terms before any commercial use.",
+  "foods": [
+    {
+      "id": "tkpi_0022",
+      "name_id": "Nasi",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 3.0,
+        "energy_kcal": 180.0,
+        "fat_g": 0.3,
+        "carbohydrate_g": 39.8
+      }
+    },
+    {
+      "id": "tkpi_0026",
+      "name_id": "Nasi beras merah",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 2.8,
+        "energy_kcal": 149.0,
+        "fat_g": 0.4,
+        "carbohydrate_g": 32.5
+      }
+    },
+    {
+      "id": "tkpi_0023",
+      "name_id": "Nasi tim",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 2.4,
+        "energy_kcal": 120.0,
+        "fat_g": 0.4,
+        "carbohydrate_g": 26.0
+      }
+    },
+    {
+      "id": "tkpi_0111",
+      "name_id": "Nasi gurih",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 4.7,
+        "energy_kcal": 190.0,
+        "fat_g": 7.5,
+        "carbohydrate_g": 26.0
+      }
+    },
+    {
+      "id": "tkpi_0042",
+      "name_id": "Mi basah",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 0.6,
+        "energy_kcal": 88.0,
+        "fat_g": 3.3,
+        "carbohydrate_g": 14.0
+      }
+    },
+    {
+      "id": "tkpi_0106",
+      "name_id": "Mie ayam",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 6.2,
+        "energy_kcal": 102.0,
+        "fat_g": 3.9,
+        "carbohydrate_g": 10.5
+      }
+    },
+    {
+      "id": "tkpi_0107",
+      "name_id": "Mie bakso",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 5.3,
+        "energy_kcal": 114.0,
+        "fat_g": 3.0,
+        "carbohydrate_g": 16.4
+      }
+    },
+    {
+      "id": "tkpi_0045",
+      "name_id": "Roti putih",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 8.0,
+        "energy_kcal": 248.0,
+        "fat_g": 1.2,
+        "carbohydrate_g": 50.0
+      }
+    },
+    {
+      "id": "tkpi_0176",
+      "name_id": "Ketela pohon/singkong kukus",
+      "category": "Umbi Berpati",
+      "per_100g": {
+        "protein_g": 1.2,
+        "energy_kcal": 153.0,
+        "fat_g": 0.3,
+        "carbohydrate_g": 36.4
+      }
+    },
+    {
+      "id": "tkpi_0179",
+      "name_id": "Ubi jalar, kuning, kukus",
+      "category": "Umbi Berpati",
+      "per_100g": {
+        "protein_g": 0.7,
+        "energy_kcal": 100.0,
+        "fat_g": 0.3,
+        "carbohydrate_g": 23.8
+      }
+    },
+    {
+      "id": "tkpi_0031",
+      "name_id": "Jagung muda, rebus",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 5.0,
+        "energy_kcal": 142.0,
+        "fat_g": 0.7,
+        "carbohydrate_g": 30.3
+      }
+    },
+    {
+      "id": "tkpi_0081",
+      "name_id": "Ketoprak",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 7.9,
+        "energy_kcal": 153.0,
+        "fat_g": 7.7,
+        "carbohydrate_g": 13.0
+      }
+    },
+    {
+      "id": "tkpi_0052",
+      "name_id": "Bakwan",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 8.2,
+        "energy_kcal": 280.0,
+        "fat_g": 10.2,
+        "carbohydrate_g": 39.0
+      }
+    },
+    {
+      "id": "tkpi_0102",
+      "name_id": "Martabak india",
+      "category": "Serealia",
+      "per_100g": {
+        "protein_g": 4.5,
+        "energy_kcal": 153.0,
+        "fat_g": 4.2,
+        "carbohydrate_g": 24.3
+      }
+    },
+    {
+      "id": "tkpi_0358",
+      "name_id": "Tahu goreng",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 9.7,
+        "energy_kcal": 115.0,
+        "fat_g": 8.5,
+        "carbohydrate_g": 2.5
+      }
+    },
+    {
+      "id": "tkpi_0379",
+      "name_id": "Tempe pasar goreng",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 20.0,
+        "energy_kcal": 336.0,
+        "fat_g": 28.0,
+        "carbohydrate_g": 7.8
+      }
+    },
+    {
+      "id": "tkpi_0372",
+      "name_id": "Tempe kedelai murni, goreng",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 24.5,
+        "energy_kcal": 350.0,
+        "fat_g": 26.6,
+        "carbohydrate_g": 10.4
+      }
+    },
+    {
+      "id": "tkpi_0357",
+      "name_id": "Tahu, mentah",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 10.9,
+        "energy_kcal": 80.0,
+        "fat_g": 4.7,
+        "carbohydrate_g": 0.8
+      }
+    },
+    {
+      "id": "tkpi_0303",
+      "name_id": "Kacang kedelai, rebus",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 20.2,
+        "energy_kcal": 189.0,
+        "fat_g": 8.2,
+        "carbohydrate_g": 12.7
+      }
+    },
+    {
+      "id": "tkpi_0301",
+      "name_id": "kacang hijau, rebus",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 8.7,
+        "energy_kcal": 109.0,
+        "fat_g": 0.5,
+        "carbohydrate_g": 18.3
+      }
+    },
+    {
+      "id": "tkpi_0308",
+      "name_id": "Kacang tanah, goreng",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 25.5,
+        "energy_kcal": 564.0,
+        "fat_g": 44.4,
+        "carbohydrate_g": 25.5
+      }
+    },
+    {
+      "id": "tkpi_0356",
+      "name_id": "Susu kedelai",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 3.5,
+        "energy_kcal": 41.0,
+        "fat_g": 2.5,
+        "carbohydrate_g": 5.0
+      }
+    },
+    {
+      "id": "tkpi_0359",
+      "name_id": "Tahu telur",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 12.6,
+        "energy_kcal": 328.0,
+        "fat_g": 19.9,
+        "carbohydrate_g": 24.6
+      }
+    },
+    {
+      "id": "tkpi_0550",
+      "name_id": "Bayam ,rebus",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 1.2,
+        "energy_kcal": 23.0,
+        "fat_g": 0.6,
+        "carbohydrate_g": 3.7
+      }
+    },
+    {
+      "id": "tkpi_0562",
+      "name_id": "Kangkung, rebus",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 2.5,
+        "energy_kcal": 22.0,
+        "fat_g": 0.6,
+        "carbohydrate_g": 3.1
+      }
+    },
+    {
+      "id": "tkpi_0560",
+      "name_id": "Kacang panjang, rebus",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 2.3,
+        "energy_kcal": 30.0,
+        "fat_g": 0.4,
+        "carbohydrate_g": 5.8
+      }
+    },
+    {
+      "id": "tkpi_0551",
+      "name_id": "Buncis, rebus",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 2.2,
+        "energy_kcal": 30.0,
+        "fat_g": 0.2,
+        "carbohydrate_g": 6.4
+      }
+    },
+    {
+      "id": "tkpi_0568",
+      "name_id": "Wortel, rebus",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 0.7,
+        "energy_kcal": 28.0,
+        "fat_g": 0.5,
+        "carbohydrate_g": 6.3
+      }
+    },
+    {
+      "id": "tkpi_0578",
+      "name_id": "Cap cai, sayur",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 5.8,
+        "energy_kcal": 97.0,
+        "fat_g": 6.3,
+        "carbohydrate_g": 4.2
+      }
+    },
+    {
+      "id": "tkpi_0579",
+      "name_id": "Gado-gado",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 6.1,
+        "energy_kcal": 137.0,
+        "fat_g": 3.2,
+        "carbohydrate_g": 21.0
+      }
+    },
+    {
+      "id": "tkpi_0580",
+      "name_id": "Gudeg, sayur",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 3.3,
+        "energy_kcal": 160.0,
+        "fat_g": 9.2,
+        "carbohydrate_g": 16.0
+      }
+    },
+    {
+      "id": "tkpi_0585",
+      "name_id": "Karedok, sayur",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 2.2,
+        "energy_kcal": 92.0,
+        "fat_g": 3.3,
+        "carbohydrate_g": 14.1
+      }
+    },
+    {
+      "id": "tkpi_0595",
+      "name_id": "Sayur asem",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 0.7,
+        "energy_kcal": 29.0,
+        "fat_g": 0.6,
+        "carbohydrate_g": 5.0
+      }
+    },
+    {
+      "id": "tkpi_0601",
+      "name_id": "Sayur sop",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 1.3,
+        "energy_kcal": 27.0,
+        "fat_g": 2.0,
+        "carbohydrate_g": 1.0
+      }
+    },
+    {
+      "id": "tkpi_0607",
+      "name_id": "Tumis bayam bersantan",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 1.4,
+        "energy_kcal": 48.0,
+        "fat_g": 4.2,
+        "carbohydrate_g": 2.6
+      }
+    },
+    {
+      "id": "tkpi_0565",
+      "name_id": "Taoge, goreng",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 3.2,
+        "energy_kcal": 88.0,
+        "fat_g": 2.1,
+        "carbohydrate_g": 14.0
+      }
+    },
+    {
+      "id": "tkpi_0605",
+      "name_id": "Semur jengkol",
+      "category": "Sayuran",
+      "per_100g": {
+        "protein_g": 6.0,
+        "energy_kcal": 212.0,
+        "fat_g": 10.0,
+        "carbohydrate_g": 29.1
+      }
+    },
+    {
+      "id": "tkpi_0795",
+      "name_id": "Ayam goreng kalasan, paha",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 37.4,
+        "energy_kcal": 275.0,
+        "fat_g": 12.2,
+        "carbohydrate_g": 1.3
+      }
+    },
+    {
+      "id": "tkpi_0800",
+      "name_id": "Ayam goreng pasundan, dada",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 37.9,
+        "energy_kcal": 246.0,
+        "fat_g": 9.0,
+        "carbohydrate_g": 0.7
+      }
+    },
+    {
+      "id": "tkpi_0801",
+      "name_id": "Ayam goreng pasundan, paha",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 33.1,
+        "energy_kcal": 245.0,
+        "fat_g": 11.4,
+        "carbohydrate_g": 0.3
+      }
+    },
+    {
+      "id": "tkpi_0796",
+      "name_id": "Ayam goreng kentucky, dada",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 34.2,
+        "energy_kcal": 298.0,
+        "fat_g": 16.8,
+        "carbohydrate_g": 0.1
+      }
+    },
+    {
+      "id": "tkpi_0805",
+      "name_id": "Ayam taliwang, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 18.2,
+        "energy_kcal": 264.0,
+        "fat_g": 20.1,
+        "carbohydrate_g": 2.7
+      }
+    },
+    {
+      "id": "tkpi_0820",
+      "name_id": "Kalio ayam, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 16.0,
+        "energy_kcal": 203.0,
+        "fat_g": 13.5,
+        "carbohydrate_g": 4.4
+      }
+    },
+    {
+      "id": "tkpi_0812",
+      "name_id": "Chicken teriyaki, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 13.0,
+        "energy_kcal": 168.0,
+        "fat_g": 9.6,
+        "carbohydrate_g": 7.5
+      }
+    },
+    {
+      "id": "tkpi_0817",
+      "name_id": "Empal (daging) Goreng, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 36.2,
+        "energy_kcal": 248.0,
+        "fat_g": 6.9,
+        "carbohydrate_g": 10.1
+      }
+    },
+    {
+      "id": "tkpi_0833",
+      "name_id": "Rendang sapi, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 22.6,
+        "energy_kcal": 193.0,
+        "fat_g": 7.9,
+        "carbohydrate_g": 7.8
+      }
+    },
+    {
+      "id": "tkpi_0832",
+      "name_id": "Rawon, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 5.4,
+        "energy_kcal": 60.0,
+        "fat_g": 2.5,
+        "carbohydrate_g": 4.0
+      }
+    },
+    {
+      "id": "tkpi_0818",
+      "name_id": "Gulai kambing",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 4.2,
+        "energy_kcal": 126.0,
+        "fat_g": 9.4,
+        "carbohydrate_g": 6.2
+      }
+    },
+    {
+      "id": "tkpi_0839",
+      "name_id": "Sop buntut, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 7.5,
+        "energy_kcal": 71.0,
+        "fat_g": 3.6,
+        "carbohydrate_g": 2.2
+      }
+    },
+    {
+      "id": "tkpi_0840",
+      "name_id": "Sop daging sapi, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 5.8,
+        "energy_kcal": 49.0,
+        "fat_g": 0.5,
+        "carbohydrate_g": 5.3
+      }
+    },
+    {
+      "id": "tkpi_0847",
+      "name_id": "Soto betawi, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 2.5,
+        "energy_kcal": 135.0,
+        "fat_g": 8.8,
+        "carbohydrate_g": 11.5
+      }
+    },
+    {
+      "id": "tkpi_0850",
+      "name_id": "Soto madura, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 3.5,
+        "energy_kcal": 60.0,
+        "fat_g": 4.5,
+        "carbohydrate_g": 1.3
+      }
+    },
+    {
+      "id": "tkpi_0851",
+      "name_id": "Soto padang, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 5.9,
+        "energy_kcal": 127.0,
+        "fat_g": 6.6,
+        "carbohydrate_g": 11.0
+      }
+    },
+    {
+      "id": "tkpi_0845",
+      "name_id": "Soto bandung, masakan",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 3.9,
+        "energy_kcal": 42.0,
+        "fat_g": 1.7,
+        "carbohydrate_g": 2.8
+      }
+    },
+    {
+      "id": "tkpi_0786",
+      "name_id": "Sapi, daging, kornet",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 16.0,
+        "energy_kcal": 289.0,
+        "fat_g": 25.0,
+        "carbohydrate_g": 0.0
+      }
+    },
+    {
+      "id": "tkpi_0787",
+      "name_id": "Sapi, daging, sosis",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 14.5,
+        "energy_kcal": 448.0,
+        "fat_g": 42.3,
+        "carbohydrate_g": 2.3
+      }
+    },
+    {
+      "id": "tkpi_0772",
+      "name_id": "Ayam, ampela, goreng",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 32.3,
+        "energy_kcal": 270.0,
+        "fat_g": 11.2,
+        "carbohydrate_g": 9.9
+      }
+    },
+    {
+      "id": "tkpi_0773",
+      "name_id": "Ayam, usus, goreng",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 45.2,
+        "energy_kcal": 473.0,
+        "fat_g": 26.3,
+        "carbohydrate_g": 13.9
+      }
+    },
+    {
+      "id": "tkpi_0774",
+      "name_id": "Bebek, daging, goreng",
+      "category": "Daging",
+      "per_100g": {
+        "protein_g": 24.0,
+        "energy_kcal": 300.0,
+        "fat_g": 20.7,
+        "carbohydrate_g": 4.5
+      }
+    },
+    {
+      "id": "tkpi_0946",
+      "name_id": "Cumi-cumi, goreng",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 40.6,
+        "energy_kcal": 265.0,
+        "fat_g": 10.1,
+        "carbohydrate_g": 0.0
+      }
+    },
+    {
+      "id": "tkpi_0948",
+      "name_id": "Ikan bandeng presto, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 17.1,
+        "energy_kcal": 296.0,
+        "fat_g": 20.3,
+        "carbohydrate_g": 11.3
+      }
+    },
+    {
+      "id": "tkpi_0963",
+      "name_id": "Ikan mujahir goreng",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 46.9,
+        "energy_kcal": 416.0,
+        "fat_g": 23.9,
+        "carbohydrate_g": 0.0
+      }
+    },
+    {
+      "id": "tkpi_0964",
+      "name_id": "Ikan Mujahir pepes",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 21.7,
+        "energy_kcal": 121.0,
+        "fat_g": 2.8,
+        "carbohydrate_g": 0.8
+      }
+    },
+    {
+      "id": "tkpi_0962",
+      "name_id": "Ikan Mas pepes",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 15.2,
+        "energy_kcal": 209.0,
+        "fat_g": 11.3,
+        "carbohydrate_g": 11.8
+      }
+    },
+    {
+      "id": "tkpi_0967",
+      "name_id": "Ikan Patin, bakar",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 17.5,
+        "energy_kcal": 144.0,
+        "fat_g": 6.3,
+        "carbohydrate_g": 4.3
+      }
+    },
+    {
+      "id": "tkpi_1006",
+      "name_id": "Gulai ikan, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 16.5,
+        "energy_kcal": 106.0,
+        "fat_g": 3.3,
+        "carbohydrate_g": 2.5
+      }
+    },
+    {
+      "id": "tkpi_1010",
+      "name_id": "Gurame asem manis, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 12.7,
+        "energy_kcal": 192.0,
+        "fat_g": 10.1,
+        "carbohydrate_g": 12.7
+      }
+    },
+    {
+      "id": "tkpi_1025",
+      "name_id": "Pempek tenggiri, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 7.2,
+        "energy_kcal": 173.0,
+        "fat_g": 1.2,
+        "carbohydrate_g": 33.4
+      }
+    },
+    {
+      "id": "tkpi_1021",
+      "name_id": "Pempek kapal selam, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 4.5,
+        "energy_kcal": 152.0,
+        "fat_g": 2.3,
+        "carbohydrate_g": 28.2
+      }
+    },
+    {
+      "id": "tkpi_1035",
+      "name_id": "Teri belado, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 23.7,
+        "energy_kcal": 365.0,
+        "fat_g": 22.3,
+        "carbohydrate_g": 17.5
+      }
+    },
+    {
+      "id": "tkpi_0996",
+      "name_id": "Abon ikan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 27.2,
+        "energy_kcal": 435.0,
+        "fat_g": 20.2,
+        "carbohydrate_g": 36.1
+      }
+    },
+    {
+      "id": "tkpi_1026",
+      "name_id": "Pencok lele, masakan",
+      "category": "Ikan/Kerang/Udang dll",
+      "per_100g": {
+        "protein_g": 7.8,
+        "energy_kcal": 372.0,
+        "fat_g": 36.3,
+        "carbohydrate_g": 3.5
+      }
+    },
+    {
+      "id": "tkpi_1049",
+      "name_id": "Telur ayam, dadar, masakan",
+      "category": "Telur",
+      "per_100g": {
+        "protein_g": 16.3,
+        "energy_kcal": 251.0,
+        "fat_g": 19.4,
+        "carbohydrate_g": 1.4
+      }
+    },
+    {
+      "id": "tkpi_1055",
+      "name_id": "Kalio telur, masakan",
+      "category": "Telur",
+      "per_100g": {
+        "protein_g": 10.6,
+        "energy_kcal": 193.0,
+        "fat_g": 12.4,
+        "carbohydrate_g": 9.7
+      }
+    },
+    {
+      "id": "tkpi_1039",
+      "name_id": "Telur ayam ras, segar",
+      "category": "Telur",
+      "per_100g": {
+        "protein_g": 12.4,
+        "energy_kcal": 154.0,
+        "fat_g": 10.8,
+        "carbohydrate_g": 0.7
+      },
+      "note": "Fresh composition; used as proxy for boiled/fried whole egg (edible portion)."
+    },
+    {
+      "id": "tkpi_1038",
+      "name_id": "Telur ayam kampung, segar",
+      "category": "Telur",
+      "per_100g": {
+        "protein_g": 10.8,
+        "energy_kcal": 174.0,
+        "fat_g": 14.0,
+        "carbohydrate_g": 1.2
+      },
+      "note": "Fresh composition; used as proxy for boiled/fried whole egg (edible portion)."
+    },
+    {
+      "id": "tkpi_1061",
+      "name_id": "Susu sapi, segar",
+      "category": "Susu",
+      "per_100g": {
+        "protein_g": 3.2,
+        "energy_kcal": 61.0,
+        "fat_g": 3.5,
+        "carbohydrate_g": 4.3
+      }
+    },
+    {
+      "id": "tkpi_1072",
+      "name_id": "Yoghurt, segar",
+      "category": "Susu",
+      "per_100g": {
+        "protein_g": 3.3,
+        "energy_kcal": 52.0,
+        "fat_g": 2.5,
+        "carbohydrate_g": 4.0
+      }
+    },
+    {
+      "id": "tkpi_1064",
+      "name_id": "Keju",
+      "category": "Susu",
+      "per_100g": {
+        "protein_g": 22.8,
+        "energy_kcal": 326.0,
+        "fat_g": 20.3,
+        "carbohydrate_g": 13.1
+      }
+    },
+    {
+      "id": "tkpi_0683",
+      "name_id": "Pisang ambon, segar",
+      "category": "Buah",
+      "per_100g": {
+        "protein_g": 1.0,
+        "energy_kcal": 108.0,
+        "fat_g": 0.8,
+        "carbohydrate_g": 24.3
+      }
+    },
+    {
+      "id": "tkpi_0610",
+      "name_id": "Alpukat, segar",
+      "category": "Buah",
+      "per_100g": {
+        "protein_g": 0.9,
+        "energy_kcal": 85.0,
+        "fat_g": 6.5,
+        "carbohydrate_g": 7.7
+      }
+    },
+    {
+      "id": "tkpi_0213",
+      "name_id": "Kerupuk udang goreng",
+      "category": "Umbi Berpati",
+      "per_100g": {
+        "protein_g": 4.7,
+        "energy_kcal": 477.0,
+        "fat_g": 20.5,
+        "carbohydrate_g": 68.5
+      }
+    },
+    {
+      "id": "tkpi_0345",
+      "name_id": "Melinjo emping tipis goreng",
+      "category": "Kacang-Kacangan",
+      "per_100g": {
+        "protein_g": 11.5,
+        "energy_kcal": 485.0,
+        "fat_g": 24.5,
+        "carbohydrate_g": 59.1
+      }
+    },
+    {
+      "id": "tkpi_1137",
+      "name_id": "Kecap",
+      "category": "Bumbu",
+      "per_100g": {
+        "protein_g": 5.7,
+        "energy_kcal": 71.0,
+        "fat_g": 1.3,
+        "carbohydrate_g": 9.0
+      }
+    }
+  ]
+}
