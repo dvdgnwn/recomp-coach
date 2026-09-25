@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Language } from '@/lib/i18n';
-import { Dumbbell, Globe, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { Language, translations } from '@/lib/i18n';
+import { Dumbbell, Globe, Trash2, Utensils } from 'lucide-react';
 
 interface HeaderProps {
   lang: Language;
@@ -17,10 +18,11 @@ export function Header({
   onClearData,
   hasData,
 }: HeaderProps) {
+  const t = translations[lang];
   return (
     <header className="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white px-4 py-3">
       <div className="max-w-md mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
             <Dumbbell className="w-4 h-4" />
           </div>
@@ -32,9 +34,19 @@ export function Header({
               Body Composition AI
             </p>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center space-x-2">
+          {/* F2 nav link */}
+          <Link
+            href="/food"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 hover:border-emerald-500/50 text-xs font-semibold text-slate-200 transition-all"
+            title={t.foodNavLabel}
+          >
+            <Utensils className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">{t.foodNavLabel}</span>
+          </Link>
+
           {hasData && (
             <button
               onClick={onClearData}
